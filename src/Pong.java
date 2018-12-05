@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,6 +52,12 @@ public class Pong extends JComponent implements ActionListener {
     int ballX = 1;
     int ballY = 1;
     int ballSpeed = 2;
+    
+    //score variables
+    int score1 =0;
+    int score2 = 0;
+    
+    Font scoreFont = new Font("arial",Font.BOLD, 36);
 
     // GAME VARIABLES END HERE    
 
@@ -110,6 +117,11 @@ public class Pong extends JComponent implements ActionListener {
         // draw the ball
         g.fillOval(ball.x, ball.y, ball.width, ball.height);
         
+        // draw the scores
+        g.setFont(scoreFont);
+        g.drawString("" + score1, WIDTH/4, 50);
+        g.drawString("" + score2, 3*WIDTH/4, 50);
+        
         // GAME DRAWING ENDS HERE
     }
 
@@ -120,6 +132,12 @@ public class Pong extends JComponent implements ActionListener {
 
     }
 
+    
+    public void resetBall(){
+        ball.x = WIDTH/2 - 10;
+        ball.y = HEIGHT/2 - 10;
+    }
+    
     // The main game loop
     // In here is where all the logic for my game will go
     public void gameLoop() {
@@ -135,6 +153,20 @@ public class Pong extends JComponent implements ActionListener {
         // ball hits top
         if(ball.y < 0){
             ballY = 1;
+        }
+        
+        // did ball hit right hand side?
+        if(ball.x + ball.width > WIDTH){
+            // add 1 to player 1's score
+            score1++;
+            resetBall();
+        }
+        
+        // did ball hit left side?
+        if(ball.x < 0){
+            // add to player 2's score
+            score2++;
+            resetBall();
         }
         
         // move paddles
@@ -157,6 +189,12 @@ public class Pong extends JComponent implements ActionListener {
         // did ball hit paddle 1?
         if(ball.intersects(paddle1)){
             ballX = 1;
+        }
+        
+        // did someone win?
+        if(score1 == 10 || score2 == 10){
+            // stop the game loop
+            gameTimer.stop();
         }
         
     }
