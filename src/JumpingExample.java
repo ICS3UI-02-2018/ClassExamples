@@ -12,6 +12,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 /**
@@ -50,6 +53,8 @@ public class JumpingExample extends JComponent implements ActionListener {
     boolean onGround = true;
 
     int yVel = 0;
+    
+    BufferedImage mario = loadImage("mario.png");
 
     // GAME VARIABLES END HERE    
     // Constructor to create the Frame and place the panel in
@@ -85,6 +90,16 @@ public class JumpingExample extends JComponent implements ActionListener {
         gameTimer.setRepeats(true);
         gameTimer.start();
     }
+    
+    public BufferedImage loadImage(String filename){
+        BufferedImage img = null;
+        try{
+            img = ImageIO.read(new File(filename));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return img;
+    }
 
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
@@ -106,8 +121,9 @@ public class JumpingExample extends JComponent implements ActionListener {
 
         // draw player
         g.setColor(Color.RED);
-        g.fillRect(player.x, player.y, player.width, player.height);
-
+        //g.fillRect(player.x, player.y, player.width, player.height);
+        g.drawImage(mario,player.x, player.y,player.width, player.height,null);
+        
         // GAME DRAWING ENDS HERE
     }
 
